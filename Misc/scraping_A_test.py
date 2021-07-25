@@ -12,6 +12,7 @@ def scrape_all():
     browser = Browser('chrome', **executable_path, headless=True)
 
     news_title, news_paragraph = mars_news(browser)
+    hemisphere_url, hemisphere_title = hemispheres(browser)
     
 
     data = {
@@ -20,7 +21,8 @@ def scrape_all():
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
       "last_modified": dt.datetime.now(),
-      "hemisphere":  hemispheres(browser)
+      "image_url": hemisphere_url,
+      "title": hemisphere_title
     }
     #Setup Splinter
     #executable_path = {'executable_path': ChromeDriverManager().install()}
@@ -133,9 +135,15 @@ def hemispheres(browser):
     except BaseException:
         return None    
 
-    hemisphere=hemisphere_image_urls
+    hemisphere_title=[]
+    hemisphere_url=[]
+    count=0
+    for count ,item in enumerate(hemisphere_image_urls):
+        hemisphere_url.append(hemisphere_image_urls[count]['img_url'])
+        hemisphere_title.append(hemisphere_image_urls[count]['title'])
+        count +=1
 
-    return hemisphere
+    return hemisphere_url, hemisphere_title
 
 if __name__ == "__main__":
     # If running as script, print scraped data
